@@ -2,6 +2,7 @@ import random, math
 import numpy as np
 from scipy.stats import f, t
 from functools import partial
+from time import time
 
 m = 3
 N = 8
@@ -255,6 +256,7 @@ while not flag:
     ]
     f3 = f1 * f2
 
+    tic = time()
     student = partial(t.ppf, q=1 - 0.025)
     criterion_of_St = student(df=f3)
 
@@ -281,6 +283,7 @@ while not flag:
     fisher = partial(f.ppf, q=1 - 0.05)
     Ft = fisher(dfn=f4, dfd=f3)
 
+
     print("Значення після критерія Стюдента:")
     print("Y1 = {0:.3f};   Y2 = {1:.3f};   Y3 = {2:.3f};   Y4 = {3:.3f}.".format(result_2[0],
                                                                                  result_2[1],
@@ -290,11 +293,15 @@ while not flag:
                                                                                      Y_average[1],
                                                                                      Y_average[2],
                                                                                      Y_average[3]))
+    toc = time()
 
     if Fp > Ft:
         print('Fp = {} > Ft = {}'.format(round(Fp, 3), Ft))
         print('Рівняння регресії неадекватно оригіналу при рівні значимості {}'.format(round(q, 2)))
+        print("Час виконання статистичної перевірки - ",toc - tic)
     else:
         print('Fp = {} < Ft = {}'.format(round(Fp, 3), Ft))
         print('Рівняння регресії адекватно оригіналу при рівні значимості {}'.format(round(q, 2)))
+        print("Час виконання статистичної перевірки - ", toc - tic)
+
         flag = True
